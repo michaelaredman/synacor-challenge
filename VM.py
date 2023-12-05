@@ -35,6 +35,7 @@ class VM:
     def define_opcodes_(self):
         self.op_codes_0 = {
             0: self.halt,
+            18: self.ret,
             21: self.noop
         }
         self.op_codes_1 = {
@@ -42,14 +43,16 @@ class VM:
             3: self.pop,
             6: self.jmp,
             17: self.call,
-            19: self.out
+            19: self.out,
+            20: self.inn
         }
         self.op_codes_2 = {
             1: self.sets,
             7: self.jt,
             8: self.jf,
             14: self.nott,
-            15: self.rmem
+            15: self.rmem,
+            16: self.wmem
         }
         self.op_codes_3 = {
             4: self.eq,
@@ -177,21 +180,36 @@ class VM:
         self.pc += 1
 
     def nott(self, a, b):
-        self.set_reg(a, ~b & 0x7FFF)
+        self.set_reg(a, ~self.get(b) & 0x7FFF)
         self.pc += 1
 
     def rmem(self, a, b):
         logging.info("memory[", a, "] = ", b)
-        self.memory[a] = self.get(b)
+        self.set_reg(a, self.memory[self.get(b)])
+        self.pc += 1
+
+    def wmem(self, a, b):
+        self.memory[self.get(a)] = self.get(b)
         self.pc += 1
 
     def call(self, a):
         self.stack.append(self.pc + 1)
         self.pc = self.get(a)
 
+    def ret(self):
+        if len(self.stack):
+            self.pc = self.stack.pop()
+        else:
+            self.halt()
+
     def out(self, a):
         logging.debug(f'out: {a}')
         print(chr(self.get(a)), end="")
+        self.pc += 1
+
+    def inn(self, a):
+        prompt = input()
+        self.set_reg(a, ord(prompt))
         self.pc += 1
 
     def noop(self):
