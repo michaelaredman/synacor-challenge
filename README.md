@@ -1,14 +1,13 @@
+
+
 # Synacor Challenge
 
-This repository holds my copy of the architecture specification and challenge
-binary from the Synacor Challenge as presented at OSCON 2012.  It is preserved
-for historical and educational purposes.  
+My implementation of the Synacor Challenge. The binary and instructions were archived by [Aneurysm9](https://github.com/Aneurysm9/vm_challenge/blob/main/arch-spec).
 
 ## Codes
 
-I have included MD5 hashes of the eight codes produced by this instance of the
-challenge for use in testing implementations of the architecture.  These codes
-can be validated as follows, replacing the quoted string with the code to test:
+Here are the MD5 hashes of the eight codes produced by the instance of the
+challenge provided by Aneurysm9.
 
 ```console
 $ echo -n "<Code Here>" | md5sum
